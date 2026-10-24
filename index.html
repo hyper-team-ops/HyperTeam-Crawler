@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2B3439" />
+  <title>Hyper Team | مكتبة البرامج والكورسات</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Hyper Team">
+        <img
+        class="brand-logo"
+        src="./assets/logo.png"
+        alt="Hyper Team">
+      </a>
+      <a class="telegram-top" href="https://t.me/HyperTeamITE_Bot" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.8 3.2 18.5 20c-.25 1.2-.95 1.5-1.92.95l-5.3-3.9-2.56 2.46c-.28.28-.51.51-1.05.51l.38-5.4 9.82-8.88c.43-.38-.1-.59-.66-.21L5.06 13.1.01 11.52c-1.1-.34-1.12-1.1.23-1.62L19.98 2.3c.91-.33 1.71.22 1.42.9Z"/></svg>
+        تواصل مع البوت
+      </a>
+    </header>
+
+    <section class="hero" id="welcome">
+      <div class="hero-content">
+        <span class="eyebrow"><span class="pulse"></span> أهلاً بك في مكتبة الفريق التقنية</span>
+        <h1>مع <span>Hyper Team</span><br>الوصول إلى المعرفة أسهل.</h1>
+        <p class="hero-description">
+          نحن فريق طلابي تطوعي يهتم بالدعم التقني ومشاركة المعرفة. أنشأنا هذه المكتبة لتسهيل العثور على البرامج والكورسات والمواد التعليمية التي جمعها الفريق.
+        </p>
+        <div class="hero-actions">
+          <button class="primary-btn" id="startBrowsing">ابدأ التصفح <span aria-hidden="true">←</span></button>
+          <a class="secondary-btn" href="#how-to-use">كيفية الاستخدام</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="hero-h">H</div>
+        <div class="art-chip chip-top">LEARN <span>+</span></div>
+        <div class="art-chip chip-bottom">CREATE · SHARE</div>
+        <div class="art-dot dot-one"></div><div class="art-dot dot-two"></div>
+      </div>
+    </section>
+
+    <section class="how-to-use" id="how-to-use">
+      <div class="section-heading">
+        <span class="section-kicker">بخطوات بسيطة</span>
+        <h2>كيف تستخدم المكتبة؟</h2>
+      </div>
+      <div class="steps">
+        <article class="step-card"><span class="step-number">01</span><div class="step-icon">⌕</div><h3>اختر القسم</h3><p>حدّد البرامج أو الكورسات لتصفح النوع الذي تحتاجه.</p></article>
+        <article class="step-card"><span class="step-number">02</span><div class="step-icon">⌕</div><h3>ابحث عن العنصر</h3><p>اكتب الاسم أو التصنيف في مربع البحث للوصول إلى النتائج.</p></article>
+        <article class="step-card"><span class="step-number">03</span><div class="step-icon">➤</div><h3>اطلبه عبر Telegram</h3><p>اضغط أيقونة Telegram، ثم أرسل الرسالة الجاهزة إلى البوت.</p></article>
+      </div>
+    </section>
+
+    <section class="library-section" id="library">
+      <div class="library-heading">
+        <div><span class="section-kicker">مكتبة Hyper Team</span><h2>ابحث عن محتواك</h2><p>اختر القسم ثم اكتب اسم البرنامج أو الكورس أو التصنيف.</p></div>
+        <span class="live-status"><span class="status-dot"></span><span id="syncStatus">جارٍ الاتصال بالمكتبة...</span></span>
+      </div>
+      <div class="section-tabs" role="group" aria-label="نوع المحتوى">
+        <button class="tab-btn active" data-type="All" id="allTab">كل المحتوى</button>
+        <button class="tab-btn" data-type="Software" id="softwareTab">البرامج <span id="softwareCount"></span></button>
+        <button class="tab-btn" data-type="Course" id="courseTab">الكورسات <span id="courseCount"></span></button>
+      </div>
+      <div class="search-row">
+        <label class="search-box" for="searchInput">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+          <input id="searchInput" type="search" placeholder="ابحث بالاسم أو التصنيف..." autocomplete="off">
+          <button id="clearSearchBtn" type="button" aria-label="مسح البحث" hidden>×</button>
+        </label>
+        <span class="result-count" id="resultCount">اختر قسمًا أو ابدأ البحث</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>اسم المحتوى</th><th>الحجم</th><th>المسار</th><th>التصنيف</th><th>الطلب</th></tr></thead>
+          <tbody id="resultsBody">
+            <tr><td colspan="5" class="empty-state">اختر البرامج أو الكورسات لعرض المحتوى.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">تُحدّث البيانات تلقائيًا كل خمس دقائق. قد تختلف طريقة توفير الملفات حسب العنصر.</p>
+    </section>
+  </main>
+  <script src="./script.js"></script>
+</body>
+</html>
