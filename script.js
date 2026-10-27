@@ -143,3 +143,37 @@ document.getElementById("startBrowsing").addEventListener("click", () => {
 });
 loadData();
 setInterval(loadData, SYNC_INTERVAL_MS);
+
+
+
+
+
+
+
+
+
+
+// 1. تفعيل زر تبديل الوضع الليلي والنهاري
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = themeToggleBtn.querySelector('.theme-icon');
+
+themeToggleBtn.addEventListener('click', () => {
+  const isLight = document.body.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.body.removeAttribute('data-theme');
+    themeIcon.textContent = '🌙';
+  } else {
+    document.body.setAttribute('data-theme', 'light');
+    themeIcon.textContent = '☀️';
+  }
+});
+
+// 2. تغيير الخط السفلي عند الانتقال والتنقل بين الأقسام
+const navLinks = document.querySelectorAll('.nav-link');
+
+navLinks.forEach(link => {
+  link.addEventListener('click', function() {
+    navLinks.forEach(item => item.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
