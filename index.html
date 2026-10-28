@@ -1,360 +1,447 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>هايبر تيم | HYPER TEAM - Continuous Energy & Innovation</title>
 
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Montserrat:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- PapaParse Library for reading Google Sheets CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-
+  <body>
     <!-- Background Tech Grid Layer -->
     <div class="bg-circuit-layer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-            <defs>
-                <pattern id="circuit-pattern" width="160" height="160" patternUnits="userSpaceOnUse">
-                    <path d="M 10 10 L 50 10 L 70 30 L 120 30 M 70 30 L 70 80 L 90 100 L 150 100" fill="none" stroke="currentColor" class="text-gold" stroke-width="1.2" stroke-dasharray="4 2"/>
-                    <circle cx="10" cy="10" r="3" fill="currentColor" class="text-orange"/>
-                    <circle cx="120" cy="30" r="3" fill="currentColor" class="text-gold"/>
-                    <circle cx="150" cy="100" r="4" fill="currentColor" class="text-orange"/>
-                    <path d="M 140 10 L 140 50 L 110 80 L 40 80 L 20 100" fill="none" stroke="currentColor" class="text-orange" stroke-width="1"/>
-                    <polygon points="135,10 145,10 140,5" fill="currentColor" class="text-gold"/>
-                </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#circuit-pattern)" />
-        </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+        <defs>
+          <pattern id="circuit-pattern" width="160" height="160" patternUnits="userSpaceOnUse">
+            <path
+              d="M 10 10 L 50 10 L 70 30 L 120 30 M 70 30 L 70 80 L 90 100 L 150 100"
+              fill="none"
+              stroke="currentColor"
+              class="text-gold"
+              stroke-width="1.2"
+              stroke-dasharray="4 2"
+            />
+            <circle cx="10" cy="10" r="3" fill="currentColor" class="text-orange" />
+            <circle cx="120" cy="30" r="3" fill="currentColor" class="text-gold" />
+            <circle cx="150" cy="100" r="4" fill="currentColor" class="text-orange" />
+            <path
+              d="M 140 10 L 140 50 L 110 80 L 40 80 L 20 100"
+              fill="none"
+              stroke="currentColor"
+              class="text-orange"
+              stroke-width="1"
+            />
+            <polygon points="135,10 145,10 140,5" fill="currentColor" class="text-gold" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#circuit-pattern)" />
+      </svg>
     </div>
 
     <!-- Header -->
     <header class="header">
-        <div class="header-container">
-            <!-- Logo Section -->
-            <a href="#" class="logo-link">
-                <div class="logo-box">
-                    <div class="logo-inner">
-                        <img src="./assets/logo.png" alt="هايبر تيم - Hyper Team" class="logo-img">
-                    </div>
-                </div>
-                <div class="logo-text">
-                    <span class="logo-title">HYPER TEAM</span>
-                    <span class="logo-subtitle">Continuous Energy</span>
-                </div>
-            </a>
-
-            <!-- Navigation Links -->
-            <nav class="nav-desktop">
-                <a href="#hero" class="nav-link active">الرئيسية</a>
-                <a href="#about" class="nav-link">عن الفريق</a>
-                <a href="#hard-drives" class="nav-link">محتوى الهاردات</a>
-                <a href="#bot-request" class="nav-link">طلب بوت Crawler</a>
-            </nav>
-
-            <!-- Actions -->
-            <div class="header-actions">
-                <button id="theme-toggle" class="btn-theme" title="تبديل الوضع الليلي / النهاري">
-                    <i id="theme-icon" class="fa-solid fa-moon"></i>
-                </button>
-
-                <a href="https://t.me/HyperTeamITE_Bot" target="_blank" rel="noopener noreferrer" class="btn-cta-desktop">
-                    <i class="fa-brands fa-telegram"></i>
-                    <span>طلب محتوى</span>
-                </a>
-
-                <button id="mobile-menu-btn" class="btn-mobile-menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
+      <div class="header-container">
+        <!-- Logo Section -->
+        <a href="#" class="logo-link">
+          <div class="logo-box">
+            <div class="logo-inner">
+              <img src="./assets/logoooo.png" alt="هايبر تيم - Hyper Team" class="logo-img" />
             </div>
-        </div>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">HYPER TEAM</span>
+            <span class="logo-subtitle">Continuous Energy</span>
+          </div>
+        </a>
 
-        <!-- Mobile Navigation Dropdown -->
-        <div id="mobile-menu" class="nav-mobile hidden">
-            <a href="#hero" class="mobile-link active">الرئيسية</a>
-            <a href="#about" class="mobile-link">عن الفريق</a>
-            <a href="#hard-drives" class="mobile-link">محتوى الهاردات</a>
-            <a href="#bot-request" class="mobile-link">طلب بوت Crawler</a>
-            <a href="https://t.me/HyperTeamITE_Bot" target="_blank" rel="noopener noreferrer" class="btn-cta-mobile">
-                <i class="fa-brands fa-telegram"></i>
-                <span>اطلب الآن عبر البوت</span>
-            </a>
+        <!-- Navigation Links -->
+        <nav class="nav-desktop">
+          <a href="#hero" class="nav-link active">الرئيسية</a>
+          <a href="#about" class="nav-link">عن الفريق</a>
+          <a href="#hard-drives" class="nav-link">محتوى الهاردات</a>
+          <a href="#bot-request" class="nav-link">طلب بوت Crawler</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="header-actions">
+          <button id="theme-toggle" class="btn-theme" title="تبديل الوضع الليلي / النهاري">
+            <i id="theme-icon" class="fa-solid fa-moon"></i>
+          </button>
+
+          <a href="https://t.me/HyperTeamITE_Bot" target="_blank" rel="noopener noreferrer" class="btn-cta-desktop">
+            <i class="fa-brands fa-telegram"></i>
+            <span>طلب محتوى</span>
+          </a>
+
+          <button id="mobile-menu-btn" class="btn-mobile-menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
         </div>
+      </div>
+
+      <!-- Mobile Navigation Dropdown -->
+      <div id="mobile-menu" class="nav-mobile hidden">
+        <a href="#hero" class="mobile-link active">الرئيسية</a>
+        <a href="#about" class="mobile-link">عن الفريق</a>
+        <a href="#hard-drives" class="mobile-link">محتوى الهاردات</a>
+        <a href="#bot-request" class="mobile-link">طلب بوت Crawler</a>
+        <a href="https://t.me/HyperTeamITE_Bot" target="_blank" rel="noopener noreferrer" class="btn-cta-mobile">
+          <i class="fa-brands fa-telegram"></i>
+          <span>اطلب الآن عبر البوت</span>
+        </a>
+      </div>
     </header>
 
     <!-- Main Content -->
     <main class="main-content">
+      <!-- Hero Section -->
+      <section id="hero" class="hero-section">
+        <div class="orbit-bg">
+          <div class="orbit-ring orbit-inner animate-spin-slow">
+            <div class="orbit-badge-h">H</div>
+            <div class="orbit-dot-orange"></div>
+          </div>
+          <div class="orbit-ring orbit-outer animate-spin-reverse-slow">
+            <div class="orbit-dot-yellow"></div>
+            <div class="orbit-dot-orange-left"></div>
+          </div>
+          <div class="glow-backdrop animate-pulse-glow"></div>
+        </div>
 
-        <!-- Hero Section -->
-        <section id="hero" class="hero-section">
-            <div class="orbit-bg">
-                <div class="orbit-ring orbit-inner animate-spin-slow">
-                    <div class="orbit-badge-h">H</div>
-                    <div class="orbit-dot-orange"></div>
-                </div>
-                <div class="orbit-ring orbit-outer animate-spin-reverse-slow">
-                    <div class="orbit-dot-yellow"></div>
-                    <div class="orbit-dot-orange-left"></div>
-                </div>
-                <div class="glow-backdrop animate-pulse-glow"></div>
+        <div class="hero-container">
+          <div class="hero-badge-wrapper">
+            <div class="floating-badge badge-top animate-float">
+              <span class="ping-dot"></span>
+              <span>CREATE • SHARE</span>
             </div>
 
-            <div class="hero-container">
-                <div class="hero-badge-wrapper">
-                    <div class="floating-badge badge-top animate-float">
-                        <span class="ping-dot"></span>
-                        <span>CREATE • SHARE</span>
-                    </div>
-
-                    <div class="floating-badge badge-bottom animate-float-delayed">
-                        <i class="fa-solid fa-bolt text-gold"></i>
-                        <span>LEARN +</span>
-                    </div>
-
-                    <div class="hero-logo-card">
-                        <svg class="circuit-overlay-svg" viewBox="0 0 200 200">
-                            <path d="M 20 20 Q 100 80 180 20 M 20 180 Q 100 120 180 180" stroke="#E2A425" stroke-width="2" fill="none"/>
-                            <circle cx="100" cy="100" r="70" stroke="#D27728" stroke-width="1.5" stroke-dasharray="6 4" fill="none"/>
-                        </svg>
-                        <div class="hero-card-h">H</div>
-                        <div class="hero-card-subtitle">HYPER TEAM</div>
-                    </div>
-                </div>
-
-                <h1 class="hero-title">
-                    طموح الشباب و <span class="gradient-text">الابتكار الأكاديمي</span>
-                </h1>
-
-                <p class="hero-description">
-                    مرحباً بكم في منصة <strong class="text-gold">هايبر تيم (Hyper Team)</strong> الرسمية. محطتك الشاملة لاستعراض واستكشاف أكبر أرشيف محتوى رقمي وأكاديمي على هاردات الفريق وطلب الملفات مباشرة عبر بوت Crawler الذكي!
-                </p>
-
-                <div class="hero-actions">
-                    <a href="#hard-drives" class="btn-primary" id="startBrowsing">
-                        <i class="fa-solid fa-hard-drive"></i>
-                        <span>تصفح محتوى الهاردات</span>
-                    </a>
-                    <a href="https://hyper-team-ops.github.io/HyperTeam-Crawler/" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-                        <i class="fa-solid fa-spider"></i>
-                        <span>موقع Crawler القديم</span>
-                    </a>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-number text-gold" id="totalCount">0</div>
-                        <div class="stat-label">إجمالي العوالم والملفات</div>
-                    </div>
-                    <div class="stat-item border-r">
-                        <div class="stat-number text-orange" id="softwareCount">0</div>
-                        <div class="stat-label">برنامج وأداة جاهزة</div>
-                    </div>
-                    <div class="stat-item border-r">
-                        <div class="stat-number text-gold" id="courseCount">0</div>
-                        <div class="stat-label">كورس ومسار شرح</div>
-                    </div>
-                    <div class="stat-item border-r">
-                        <div class="stat-number text-orange">24/7</div>
-                        <div class="stat-label">طلب مباشر عبر البوت</div>
-                    </div>
-                </div>
+            <div class="floating-badge badge-bottom animate-float-delayed">
+              <i class="fa-solid fa-bolt text-gold"></i>
+              <span>LEARN +</span>
             </div>
-        </section>
 
-        <!-- About Section -->
-        <section id="about" class="about-section">
-            <div class="section-container">
-                <div class="section-header">
-                    <span class="section-tag tag-gold">فلسفة الشعار والرسالة</span>
-                    <h2 class="section-title">عن <span class="text-gold">هايبر تيم</span></h2>
-                </div>
-
-                <div class="about-grid">
-                    <div class="philosophy-card">
-                        <div class="philosophy-glow"></div>
-                        <div class="philosophy-header">
-                            <div class="philosophy-icon">
-                                <i class="fa-solid fa-atom"></i>
-                            </div>
-                            <div>
-                                <h3 class="philosophy-title">طاقة مستمرة وإبداع</h3>
-                                <p class="philosophy-subtitle">Continuous Energy & Innovation</p>
-                            </div>
-                        </div>
-                        <p class="philosophy-text">
-                            يرتكز شعار <strong>هايبر تيم</strong> على حرف <strong>H</strong> الديناميكي، المصمم بشكل يتدفق داخله نموذج طاقة عضوي. هذا الشكل يجسد فكرة الطاقة الفائقة التي تعبر عن دورة مستمرة من الحركة، النمو والإبداع، ليعكس الحماس والدافع الذي يتميز به الطلاب.
-                        </p>
-                        <p class="philosophy-text">
-                            تتكامل معه عناصر مستوحاة من الدوائر الإلكترونية لتؤكد ارتباط الفريق بالتكنولوجيا، التعلم الرقمي والتعليم المستقبلي.
-                        </p>
-                    </div>
-
-                    <div class="features-list">
-                        <div class="feature-item border-gold">
-                            <div class="feature-icon icon-gold">
-                                <i class="fa-solid fa-folder-tree"></i>
-                            </div>
-                            <div>
-                                <h4 class="feature-title">أرشيف شامل ومنظم</h4>
-                                <p class="feature-desc">تصفح شجرة المجلدات بالكامل للهاردات الخاصة بالفريق بسهولة ووضوح من أي جهاز.</p>
-                            </div>
-                        </div>
-
-                        <div class="feature-item border-orange">
-                            <div class="feature-icon icon-orange">
-                                <i class="fa-solid fa-robot"></i>
-                            </div>
-                            <div>
-                                <h4 class="feature-title">طلب تلقائي عبر Telegram Bot</h4>
-                                <p class="feature-desc">نظام Crawler ذكي يتيح لك طلب أي ملف أو كورس بلمسة زر لتلقي رابط التحميل فوراً.</p>
-                            </div>
-                        </div>
-
-                        <div class="feature-item border-gold">
-                            <div class="feature-icon icon-gold">
-                                <i class="fa-solid fa-bolt"></i>
-                            </div>
-                            <div>
-                                <h4 class="feature-title">تحديثات دورية وسريعة</h4>
-                                <p class="feature-desc">يتم إضافة أحدث الكورسات والبرامج الأكاديمية باستمرار لتلبية كافة احتياجات الطلاب.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="hero-logo-card">
+              <svg class="circuit-overlay-svg" viewBox="0 0 200 200">
+                <path
+                  d="M 20 20 Q 100 80 180 20 M 20 180 Q 100 120 180 180"
+                  stroke="#E2A425"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="70"
+                  stroke="#D27728"
+                  stroke-width="1.5"
+                  stroke-dasharray="6 4"
+                  fill="none"
+                />
+              </svg>
+              <div class="hero-logo-img-wrapper">
+                <img src="./assets/logoooo.png" alt="هايبر تيم - Hyper Team" class="hero-logo-img" />
+              </div>
+              <div class="hero-card-subtitle">HYPER TEAM</div>
             </div>
-        </section>
+          </div>
 
-        <!-- Hard Drive Content Section -->
-        <section id="hard-drives" class="drives-section">
-            <div class="section-container">
-                <div class="section-header">
-                    <span class="section-tag tag-orange">مستكشف المحتوى التفاعلي</span>
-                    <h2 class="section-title">محتويات هاردات <span class="text-gold">هايبر تيم</span></h2>
-                    <p class="section-subtitle" id="syncStatus">جارٍ تحميل أحدث البيانات الحقيقية من Google Sheets...</p>
-                </div>
+          <h1 class="hero-title">طموح الشباب و <span class="gradient-text">الابتكار الأكاديمي</span></h1>
 
-                <div class="search-filter-box">
-                    <div class="search-input-wrapper">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input id="searchInput" type="text" placeholder="ابحث عن اسم كورس، برنامج، مسار، أو تصنيف..." class="search-input">
-                        <button id="clearSearchBtn" class="btn-clear-search hidden"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
+          <p class="hero-description">
+            مرحباً بكم في منصة <strong class="text-gold">هايبر تيم (Hyper Team)</strong> الرسمية. محطتك الشاملة لاستعراض
+            واستكشاف أكبر أرشيف محتوى رقمي وأكاديمي على هاردات الفريق وطلب الملفات مباشرة عبر بوت Crawler الذكي!
+          </p>
 
-                    <div class="filter-buttons" id="filter-buttons">
-                        <button class="filter-btn tab-btn active" data-type="All">الكل (ALL)</button>
-                        <button class="filter-btn tab-btn" data-type="Software"><i class="fa-solid fa-laptop-code"></i> البرامج والأدوات</button>
-                        <button class="filter-btn tab-btn" data-type="Course"><i class="fa-solid fa-graduation-cap"></i> الكورسات والشروحات</button>
-                        <button class="filter-btn tab-btn" data-type="OS"><i class="fa-brands fa-windows"></i> أنظمة التشغيل (OS)</button>
-                    </div>
+          <div class="hero-actions">
+            <a href="#hard-drives" class="btn-primary" id="startBrowsing">
+              <i class="fa-solid fa-hard-drive"></i>
+              <span>تصفح محتوى الهاردات</span>
+            </a>
+            <a href="https://t.me/HyperTeam_Chat" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+              <i class="fa-solid fa-comments"></i>
+              <span>مجموعة المناقشة</span>
+            </a>
+          </div>
 
-                    <div id="resultCount" class="result-count-label">جارٍ معالجة البيانات...</div>
-                </div>
-
-                <!-- CARDS CONTAINER FOR GOOGLE SHEETS DATA -->
-                <div id="content-grid" class="cards-grid">
-                    <!-- Dynamic Google Sheets Cards Injected Here -->
-                </div>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number text-gold" id="totalCount">0</div>
+              <div class="stat-label">إجمالي العوالم والملفات</div>
             </div>
-        </section>
-
-        <!-- Bot Request Banner Section -->
-        <section id="bot-request" class="bot-banner-section">
-            <div class="banner-container">
-                <div class="bot-banner-icon">
-                    <i class="fa-brands fa-telegram animate-bounce"></i>
-                </div>
-                <h2 class="banner-title">هل تبحث عن ملف خاص أو تريد طلب هارد كامل؟</h2>
-                <p class="banner-desc">تواصل مباشرة مع بوت <strong>Hyper Team Crawler</strong> للحصول على روابط سريعة واستجابة فورية لكافة طلباتك.</p>
-                <a href="https://t.me/HyperTeamITE_Bot" target="_blank" rel="noopener noreferrer" class="btn-primary btn-large">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    <span>افتح البوت في Telegram</span>
-                </a>
+            <div class="stat-item border-r">
+              <div class="stat-number text-orange" id="softwareCount">0</div>
+              <div class="stat-label">برنامج وأداة جاهزة</div>
             </div>
-        </section>
+            <div class="stat-item border-r">
+              <div class="stat-number text-gold" id="courseCount">0</div>
+              <div class="stat-label">كورس ومسار شرح</div>
+            </div>
+            <div class="stat-item border-r">
+              <div class="stat-number text-orange">24/7</div>
+              <div class="stat-label">طلب مباشر عبر البوت</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      <!-- About Section -->
+      <section id="about" class="about-section">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-tag tag-gold">فلسفة الشعار والرسالة</span>
+            <h2 class="section-title">عن <span class="text-gold">هايبر تيم</span></h2>
+          </div>
+
+          <div class="about-grid">
+            <div class="philosophy-card">
+              <div class="philosophy-glow"></div>
+              <div class="philosophy-header">
+                <div class="philosophy-icon">
+                  <i class="fa-solid fa-atom"></i>
+                </div>
+                <div>
+                  <h3 class="philosophy-title">طاقة مستمرة وإبداع</h3>
+                  <p class="philosophy-subtitle">Continuous Energy & Innovation</p>
+                </div>
+              </div>
+              <p class="philosophy-text">
+                يرتكز شعار <strong>هايبر تيم</strong> على حرف <strong>H</strong> الديناميكي، المصمم بشكل يتدفق داخله
+                نموذج طاقة عضوي. هذا الشكل يجسد فكرة الطاقة الفائقة التي تعبر عن دورة مستمرة من الحركة، النمو والإبداع،
+                ليعكس الحماس والدافع الذي يتميز به الطلاب.
+              </p>
+              <p class="philosophy-text">
+                تتكامل معه عناصر مستوحاة من الدوائر الإلكترونية لتؤكد ارتباط الفريق بالتكنولوجيا، التعلم الرقمي والتعليم
+                المستقبلي.
+              </p>
+            </div>
+
+            <div class="features-list">
+              <div class="feature-item border-gold">
+                <div class="feature-icon icon-gold">
+                  <i class="fa-solid fa-folder-tree"></i>
+                </div>
+                <div>
+                  <h4 class="feature-title">أرشيف شامل ومنظم</h4>
+                  <p class="feature-desc">
+                    تصفح شجرة المجلدات بالكامل للهاردات الخاصة بالفريق بسهولة ووضوح من أي جهاز.
+                  </p>
+                </div>
+              </div>
+
+              <div class="feature-item border-orange">
+                <div class="feature-icon icon-orange">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                  <h4 class="feature-title">طلب تلقائي عبر Telegram Bot</h4>
+                  <p class="feature-desc">
+                    نظام Crawler ذكي يتيح لك طلب أي ملف أو كورس بلمسة زر لتلقي رابط التحميل فوراً.
+                  </p>
+                </div>
+              </div>
+
+              <div class="feature-item border-gold">
+                <div class="feature-icon icon-gold">
+                  <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div>
+                  <h4 class="feature-title">تحديثات دورية وسريعة</h4>
+                  <p class="feature-desc">
+                    يتم إضافة أحدث الكورسات والبرامج الأكاديمية باستمرار لتلبية كافة احتياجات الطلاب.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hard Drive Content Section -->
+      <section id="hard-drives" class="drives-section">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-tag tag-orange">مستكشف المحتوى التفاعلي</span>
+            <h2 class="section-title">محتويات هاردات <span class="text-gold">هايبر تيم</span></h2>
+            <p class="section-subtitle" id="syncStatus">جارٍ تحميل أحدث البيانات الحقيقية من Google Sheets...</p>
+          </div>
+
+          <div class="search-filter-box">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="ابحث عن اسم كورس، برنامج، مسار، أو تصنيف..."
+                class="search-input"
+              />
+              <button id="clearSearchBtn" class="btn-clear-search hidden"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="filter-buttons" id="filter-buttons">
+              <button class="filter-btn tab-btn active" data-type="All">الكل (ALL)</button>
+              <button class="filter-btn tab-btn" data-type="Software">
+                <i class="fa-solid fa-laptop-code"></i> البرامج والأدوات
+              </button>
+              <button class="filter-btn tab-btn" data-type="Course">
+                <i class="fa-solid fa-graduation-cap"></i> الكورسات والشروحات
+              </button>
+              <button class="filter-btn tab-btn" data-type="OS">
+                <i class="fa-brands fa-windows"></i> أنظمة التشغيل (OS)
+              </button>
+            </div>
+
+            <div id="resultCount" class="result-count-label">جارٍ معالجة البيانات...</div>
+          </div>
+
+          <!-- CARDS CONTAINER FOR GOOGLE SHEETS DATA -->
+          <div id="content-grid" class="cards-grid">
+            <!-- Dynamic Google Sheets Cards Injected Here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Bot Request Banner Section -->
+      <section id="bot-request" class="bot-banner-section">
+        <div class="banner-container">
+          <div class="bot-banner-icon">
+            <i class="fa-brands fa-telegram animate-bounce"></i>
+          </div>
+          <h2 class="banner-title">هل تبحث عن ملف خاص أو تريد طلب هارد كامل؟</h2>
+          <p class="banner-desc">
+            تواصل مباشرة مع بوت <strong>Hyper Team Crawler</strong> للحصول على روابط سريعة واستجابة فورية لكافة طلباتك.
+          </p>
+          <a
+            href="https://t.me/HyperTeamITE_Bot"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary btn-large"
+          >
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>افتح البوت في Telegram</span>
+          </a>
+        </div>
+      </section>
     </main>
 
     <!-- Folder Tree Drawer / Modal -->
     <div id="tree-modal" class="modal-backdrop hidden">
-        <div class="modal-card">
-            <div class="modal-header">
-                <div class="modal-header-title">
-                    <i class="fa-solid fa-folder-open text-gold"></i>
-                    <h3 id="modal-title">استكشاف شجرة المجلدات والمسار</h3>
-                </div>
-                <button id="close-modal" class="btn-close-modal">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div id="modal-tree-content" class="modal-body">
-                <!-- Tree view inserted here -->
-            </div>
-
-            <div class="modal-footer">
-                <span>احصل على هذا المجلد كاملاً عبر البوت مباشرة</span>
-                <a id="modal-bot-btn" href="https://t.me/HyperTeamITE_Bot" target="_blank" rel="noopener noreferrer" class="btn-primary btn-sm">
-                    <i class="fa-brands fa-telegram"></i>
-                    <span>طلب المجلد من البوت</span>
-                </a>
-            </div>
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <i class="fa-solid fa-folder-open text-gold"></i>
+            <h3 id="modal-title">استكشاف شجرة المجلدات والمسار</h3>
+          </div>
+          <button id="close-modal" class="btn-close-modal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
+
+        <div id="modal-tree-content" class="modal-body">
+          <!-- Tree view inserted here -->
+        </div>
+
+        <div class="modal-footer">
+          <span>احصل على هذا المجلد كاملاً عبر البوت مباشرة</span>
+          <a
+            id="modal-bot-btn"
+            href="https://t.me/HyperTeamITE_Bot"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary btn-sm"
+          >
+            <i class="fa-brands fa-telegram"></i>
+            <span>طلب المجلد من البوت</span>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="section-container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <div class="footer-h-icon">H</div>
-                        <span class="footer-brand-name">HYPER TEAM</span>
-                    </div>
-                    <p class="footer-desc">فريق طلابي أكاديمي يسعى لتمكين الطلاب وتوفير الموارد والمحتويات التعليمية الرقمية بأعلى جودة وطاقة مستمرة.</p>
+      <div class="section-container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="logo-box">
+                <div class="logo-inner">
+                  <img src="./assets/logoooo.png" alt="هايبر تيم - Hyper Team" class="logo-img" />
                 </div>
-
-                <div class="footer-links">
-                    <h4 class="footer-heading border-gold">روابط السريعة</h4>
-                    <ul class="footer-list">
-                        <li><a href="#hero">الرئيسية</a></li>
-                        <li><a href="#about">عن الشعار والفريق</a></li>
-                        <li><a href="#hard-drives">محتوى الهاردات</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-social">
-                    <h4 class="footer-heading border-orange">مجتمع هايبر تيم</h4>
-                    <div class="social-icons">
-                        <a href="https://t.me/HyperTeamITE_Bot" target="_blank" rel="noopener noreferrer" class="social-btn text-gold" title="تليجرام البوت"><i class="fa-brands fa-telegram"></i></a>
-                        <a href="https://www.instagram.com/hyperteam_ite?cplk=cTFjMmI5b3llazd4" target="_blank" rel="noopener noreferrer" class="social-btn text-pink" title="إنستغرام"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://www.facebook.com/share/1DxY18xMkz/" target="_blank" rel="noopener noreferrer" class="social-btn text-blue" title="فيسبوك"><i class="fa-brands fa-facebook"></i></a>
-                    </div>
-                </div>
+              </div>
+              <span class="footer-brand-name">HYPER TEAM</span>
             </div>
+            <p class="footer-desc">
+              فريق طلابي أكاديمي يسعى لتمكين الطلاب وتوفير الموارد والمحتويات التعليمية الرقمية بأعلى جودة وطاقة مستمرة.
+            </p>
+          </div>
 
-            <div class="footer-bottom">
-                <div>&copy; 2026 <span class="text-gold">HYPER TEAM</span>. جميع الحقوق محفوظة.</div>
-                <div class="footer-credit">
-                    <span>صُمم بـ</span>
-                    <i class="fa-solid fa-bolt text-gold"></i>
-                    <span>لأجل طلاب هايبر تيم</span>
-                </div>
+          <div class="footer-links">
+            <h4 class="footer-heading border-gold">روابط السريعة</h4>
+            <ul class="footer-list">
+              <li><a href="#hero">الرئيسية</a></li>
+              <li><a href="#about">عن الشعار والفريق</a></li>
+              <li><a href="#hard-drives">محتوى الهاردات</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-social">
+            <h4 class="footer-heading border-orange">مجتمع هايبر تيم</h4>
+            <div class="social-icons">
+              <a
+                href="https://t.me/HyperTeam_ITE"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-btn text-gold"
+                title="تليجرام البوت"
+                ><i class="fa-brands fa-telegram"></i
+              ></a>
+              <a
+                href="https://www.instagram.com/hyperteam_ite?cplk=cTFjMmI5b3llazd4"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-btn text-pink"
+                title="إنستغرام"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a
+                href="https://www.facebook.com/share/1DxY18xMkz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-btn text-blue"
+                title="فيسبوك"
+                ><i class="fa-brands fa-facebook"></i
+              ></a>
             </div>
+          </div>
         </div>
+
+        <div class="footer-bottom">
+          <div>&copy; 2026 <span class="text-gold">HYPER TEAM</span>. جميع الحقوق محفوظة.</div>
+          <div class="footer-credit">
+            <span>صُمم بـ</span>
+            <i class="fa-solid fa-bolt text-gold"></i>
+            <span>لأجل طلاب هايبر تيم</span>
+          </div>
+        </div>
+      </div>
     </footer>
 
     <!-- External JavaScript -->
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
