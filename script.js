@@ -42,7 +42,9 @@ function fetchSheet(url, type) {
             return;
           }
           resolve(
-            result.data.filter((row) => row["File Name"] || row["Path"]).map((row) => ({ ...row, _sourceType: type })),
+            result.data
+              .filter((row) => row["File Name"] || row["Path"] || Object.values(row).some((v) => v))
+              .map((row) => ({ ...row, _sourceType: type })),
           );
         },
         error: reject,
@@ -112,10 +114,13 @@ function escapeHtml(value) {
 }
 
 function getSourceType(row) {
-  return safeText(
-    row["Source Type"] || row["Source Type "] || row["SourceType"],
-    safeText(row["File Name"], "Unknown"),
-  );
+  for (const key of Object.keys(row)) {
+    const cleanKey = key.trim().toLowerCase();
+    if (cleanKey === "source type" || cleanKey === "sourcetype" || cleanKey === "source_type") {
+      return safeText(row[key], "");
+    }
+  }
+  return safeText(row["Source Type"], "");
 }
 
 function isOSRow(row) {
@@ -131,13 +136,32 @@ function isOSRow(row) {
 }
 
 function makeTelegramUrl(row) {
-  const sourceType = getSourceType(row);
+  const sourceType = getSourceType(row) || safeText(row["File Name"], "Unknown");
   const kind = row._sourceType === "Course" ? "Course" : "Software";
   const fileName = safeText(row["File Name"], "بدون اسم");
   const message = `طلب ملف/كورس جديد:\nاسم الملف: ${fileName}\nالنوع: ${kind}\nالمصدر: ${sourceType}`;
   return `https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`;
 }
+function showOfficeOnlyModal(courseName) {
+  const name = decodeURIComponent(courseName);
+  const modal = document.getElementById("tree-modal");
+  const title = document.getElementById("modal-title");
+  const content = document.getElementById("modal-tree-content");
+  const footer = document.querySelector(".modal-footer");
 
+  if (title) title.innerText = "تنبيه الكورس";
+  if (content) {
+    content.innerHTML = `
+      <div style="text-align: center; padding: 1.5rem 0;">
+        <i class="fa-solid fa-building-columns" style="font-size: 3rem; margin-bottom: 1rem; color: #e2a425;"></i>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">${escapeHtml(name)}</h3>
+        <p style="color: #d1d5db; font-size: 1rem; line-height: 1.6;">هذا الكورس غير متاح على يوتيوب، وهو متوفر في المكتب فقط.</p>
+      </div>
+    `;
+  }
+  if (footer) footer.style.display = "none";
+  if (modal) modal.classList.remove("hidden");
+}
 // RENDER REAL GOOGLE SHEETS DATA INTO YOUR HTML CARDS
 function renderResults() {
   if (!contentGrid) return;
@@ -155,7 +179,7 @@ function renderResults() {
     }
 
     const searchable =
-      `${row["File Name"] || ""} ${row["Category"] || ""} ${row["Path"] || ""} ${row["Source Type"] || ""}`.toLocaleLowerCase();
+      `${row["File Name"] || ""} ${row["Category"] || ""} ${row["Path"] || ""} ${getSourceType(row)}`.toLocaleLowerCase();
     return typeMatch && (!query || searchable.includes(query));
   });
 
@@ -188,7 +212,35 @@ function renderResults() {
       const path = escapeHtml(safeText(row["Path"], "مسار غير محدد"));
       const category = escapeHtml(safeText(row["Category"], row._sourceType === "Course" ? "كورس" : "برنامج"));
       const telegramUrl = makeTelegramUrl(row);
+      const isCourse = row._sourceType === "Course";
+      const sourceType = getSourceType(row);
+      const hasValidUrl = sourceType.startsWith("http://") || sourceType.startsWith("https://");
 
+      let actionBtnHtml = "";
+      if (isCourse) {
+        if (hasValidUrl) {
+          actionBtnHtml = `
+            <a href="${escapeHtml(sourceType)}" target="_blank" rel="noopener noreferrer" class="btn-card-bot">
+                <i class="fa-brands fa-youtube"></i>
+                <span>مشاهدة عبر اليوتيوب</span>
+            </a>
+          `;
+        } else {
+          actionBtnHtml = `
+            <button onclick="showOfficeOnlyModal('${encodeURIComponent(name)}')" class="btn-card-bot">
+                <i class="fa-solid fa-building-columns"></i>
+                <span>متوفر في المكتب فقط</span>
+            </button>
+          `;
+        }
+      } else {
+        actionBtnHtml = `
+          <a href="${telegramUrl}" target="_blank" class="btn-card-bot">
+              <i class="fa-brands fa-telegram"></i>
+              <span>طلب عبر البوت</span>
+          </a>
+        `;
+      }
       return `
             <div class="card-item">
                 <div>
@@ -213,11 +265,7 @@ function renderResults() {
 <button onclick="openPathModal('${encodeURIComponent(name)}', '${encodeURIComponent(path)}', '${encodeURIComponent(telegramUrl)}')" class="btn-card-tree">                        <i class="fa-solid fa-sitemap"></i>
                         <span>عرض المسار</span>
                     </button>
-
-                    <a href="${telegramUrl}" target="_blank" class="btn-card-bot">
-                        <i class="fa-brands fa-telegram"></i>
-                        <span>طلب عبر البوت</span>
-                    </a>
+${actionBtnHtml}
                 </div>
             </div>
         `;
@@ -227,25 +275,29 @@ function renderResults() {
 
 // MODAL PATH VIEW
 // MODAL PATH VIEW
-function openPathModal(encodedName, encodedPath, encodedTelegramUrl) { // <-- 1. أضفنا البرامتر هنا
-    const name = decodeURIComponent(encodedName);
-    const path = decodeURIComponent(encodedPath);
-    const telegramUrl = encodedTelegramUrl ? decodeURIComponent(encodedTelegramUrl) : `https://t.me/${TELEGRAM_BOT}`;
+function openPathModal(encodedName, encodedPath, encodedTelegramUrl) {
+  // <-- 1. أضفنا البرامتر هنا
+  const name = decodeURIComponent(encodedName);
+  const path = decodeURIComponent(encodedPath);
+  const telegramUrl = encodedTelegramUrl ? decodeURIComponent(encodedTelegramUrl) : `https://t.me/${TELEGRAM_BOT}`;
 
-    document.getElementById('modal-title').innerText = name;
-    const treeContainer = document.getElementById('modal-tree-content');
+  document.getElementById("modal-title").innerText = name;
+  const treeContainer = document.getElementById("modal-tree-content");
 
-    treeContainer.innerHTML = `
-        <div class="tree-line"><strong>الملف / المجلد:</strong> ${name}</div>
-        <div class="tree-line"><strong>المسار الفعلي على الهارد:</strong><br>${path}</div>
+  treeContainer.innerHTML = `
+        <div class="tree-line"><strong>الملف / المجلد:</strong> ${escapeHtml(name)}</div>
+        <div class="tree-line"><strong>المسار الفعلي على الهارد:</strong><br>${escapeHtml(path)}</div>
     `;
 
-    const modalBotBtn = document.getElementById('modal-bot-btn');
-    if (modalBotBtn) {
-        modalBotBtn.href = telegramUrl;
-    }
+  const footer = document.querySelector(".modal-footer");
+  if (footer) footer.style.display = "flex";
 
-    document.getElementById('tree-modal').classList.remove('hidden');
+  const modalBotBtn = document.getElementById("modal-bot-btn");
+  if (modalBotBtn) {
+    modalBotBtn.href = telegramUrl;
+  }
+
+  document.getElementById("tree-modal").classList.remove("hidden");
 }
 document.getElementById("close-modal")?.addEventListener("click", () => {
   document.getElementById("tree-modal").classList.add("hidden");
