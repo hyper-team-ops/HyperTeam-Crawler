@@ -142,6 +142,29 @@ function makeTelegramUrl(row) {
   const message = `طلب ملف/كورس جديد:\nاسم الملف: ${fileName}\nالنوع: ${kind}\nالمصدر: ${sourceType}`;
   return `https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`;
 }
+function getDetailsText(row) {
+  for (const key of Object.keys(row)) {
+    if (key.trim().toLowerCase() === "details") {
+      return safeText(row[key], "لا توجد تفاصيل إضافية لهذا العنصر.");
+    }
+  }
+  return safeText(row["Details"], "لا توجد تفاصيل إضافية لهذا العنصر.");
+}
+
+function isProgrammingRow(row) {
+  const text =
+    `${row["File Name"] || ""} ${row["Category"] || ""} ${row["Path"] || ""} ${row["Source Type"] || ""}`.toLowerCase();
+  return (
+    text.includes("programming") ||
+    text.includes("برمجة") ||
+    text.includes("code") ||
+    text.includes("c++") ||
+    text.includes("python") ||
+    text.includes("javascript") ||
+    text.includes("java") ||
+    text.includes("react")
+  );
+}
 function showOfficeOnlyModal(courseName) {
   const name = decodeURIComponent(courseName);
   const modal = document.getElementById("tree-modal");
@@ -174,6 +197,8 @@ function renderResults() {
       typeMatch = true;
     } else if (activeType === "OS") {
       typeMatch = isOSRow(row);
+    } else if (activeType === "Programming") {
+      typeMatch = isProgrammingRow(row);
     } else {
       typeMatch = row._sourceType === activeType;
     }
@@ -210,6 +235,7 @@ function renderResults() {
       const name = escapeHtml(safeText(row["File Name"], "بدون اسم"));
       const size = escapeHtml(safeText(row["Size"], "حجم غير محدد"));
       const path = escapeHtml(safeText(row["Path"], "مسار غير محدد"));
+      const details = escapeHtml(getDetailsText(row));
       const category = escapeHtml(safeText(row["Category"], row._sourceType === "Course" ? "كورس" : "برنامج"));
       const telegramUrl = makeTelegramUrl(row);
       const isCourse = row._sourceType === "Course";
@@ -256,17 +282,18 @@ function renderResults() {
                     </p>
 
                     <div class="card-tags">
-                        <span class="tag-badge">#${row._sourceType}</span>
-                        ${isOSRow(row) ? '<span class="tag-badge">#OS</span>' : ""}
-                    </div>
+                    <span class="tag-badge">#${row._sourceType}</span>
+                    ${isOSRow(row) ? '<span class="tag-badge">#OS</span>' : ""}
+                    ${isProgrammingRow(row) ? '<span class="tag-badge">#Programming</span>' : ""}
                 </div>
-
-                <div class="card-footer">
-<button onclick="openPathModal('${encodeURIComponent(name)}', '${encodeURIComponent(path)}', '${encodeURIComponent(telegramUrl)}')" class="btn-card-tree">                        <i class="fa-solid fa-sitemap"></i>
-                        <span>عرض المسار</span>
-                    </button>
-${actionBtnHtml}
                 </div>
+<div class="card-footer">
+                <button onclick="openDetailsModal('${encodeURIComponent(name)}', '${encodeURIComponent(details)}', '${encodeURIComponent(telegramUrl)}')" class="btn-card-tree">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>التفاصيل</span>
+                </button>
+                ${actionBtnHtml}
+            </div>
             </div>
         `;
     })
@@ -275,19 +302,17 @@ ${actionBtnHtml}
 
 // MODAL PATH VIEW
 // MODAL PATH VIEW
-function openPathModal(encodedName, encodedPath, encodedTelegramUrl) {
-  // <-- 1. أضفنا البرامتر هنا
+function openDetailsModal(encodedName, encodedDetails, encodedTelegramUrl) {
   const name = decodeURIComponent(encodedName);
-  const path = decodeURIComponent(encodedPath);
+  const details = decodeURIComponent(encodedDetails);
   const telegramUrl = encodedTelegramUrl ? decodeURIComponent(encodedTelegramUrl) : `https://t.me/${TELEGRAM_BOT}`;
 
-  document.getElementById("modal-title").innerText = name;
+  document.getElementById("modal-title").innerText = `تفاصيل: ${name}`;
   const treeContainer = document.getElementById("modal-tree-content");
 
   treeContainer.innerHTML = `
-        <div class="tree-line"><strong>الملف / المجلد:</strong> ${escapeHtml(name)}</div>
-        <div class="tree-line"><strong>المسار الفعلي على الهارد:</strong><br>${escapeHtml(path)}</div>
-    `;
+    <div class="tree-line" style="line-height: 1.6; white-space: pre-wrap;"><strong>التفاصيل:</strong><br>${escapeHtml(details)}</div>
+  `;
 
   const footer = document.querySelector(".modal-footer");
   if (footer) footer.style.display = "flex";
