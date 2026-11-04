@@ -278,7 +278,11 @@ html.light ::-webkit-scrollbar-track {
 .logo-inner {
   width: 100%;
   height: 100%;
-background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39, 43, 0.95) 80%);  border-radius: 10px;
+background: radial-gradient(
+  circle at center,
+  var(--brand-cream) 0%,
+  rgba(32, 39, 43, 0.95) 80%
+);  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -308,7 +312,7 @@ background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39
 .logo-subtitle {
   font-size: 10px;
   font-weight: 700;
-  color: #9ca3af;
+  color: var(--text-secondary);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -362,7 +366,7 @@ background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39
   padding: 0.625rem;
   border-radius: 12px;
   border: 1px solid rgba(226, 164, 37, 0.3);
-  background-color: rgba(43, 52, 57, 0.5);
+  background-color: var(--card-bg);
   color: var(--brand-gold);
   transition: all 0.3s ease;
 }
@@ -395,7 +399,7 @@ background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39
 .btn-mobile-menu {
   display: block;
   font-size: 1.5rem;
-  color: #d1d5db;
+  color: var(--text-primary);
 }
 @media (min-width: 768px) {
   .btn-mobile-menu {
@@ -404,7 +408,7 @@ background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39
 }
 
 .nav-mobile {
-  background-color: rgba(43, 52, 57, 0.95);
+  background-color: var(--header-bg);
   border-bottom: 1px solid var(--border-color);
   padding: 1rem 1rem 1.5rem;
   display: flex;
@@ -422,7 +426,7 @@ background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39
   padding: 0.75rem 1rem;
   border-radius: 8px;
   font-weight: 700;
-  color: #e5e7eb;
+  color: var(--text-primary);
   transition: all 0.3s;
 }
 .mobile-link.active,
@@ -442,6 +446,59 @@ background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39
   background: linear-gradient(90deg, var(--brand-gold), var(--brand-orange));
   color: var(--bg-dark);
   font-weight: 900;
+}
+/* ==========================================================================
+   Navbar — Light Mode Refinements
+   ========================================================================== */
+
+html.light .header {
+  border-bottom-color: #e9dcc9;
+  box-shadow: 0 4px 18px rgba(43, 52, 57, 0.04);
+}
+
+html.light .logo-inner {
+  background: radial-gradient(
+    circle at center,
+    #ffffff 0%,
+    #f7e8d2 100%
+  );
+}
+
+html.light .nav-link:hover,
+html.light .nav-link.active {
+  color: var(--brand-orange);
+}
+
+html.light .btn-theme {
+  border-color: #e9dcc9;
+}
+
+html.light .btn-theme:hover {
+  background-color: #fdf1de;
+  border-color: var(--brand-orange);
+  color: var(--text-dark);
+}
+
+html.light .mobile-link.active,
+html.light .mobile-link:hover {
+  color: var(--brand-orange);
+  background-color: #fdf1de;
+}
+
+html.light .btn-cta-desktop,
+html.light .btn-cta-mobile {
+  color: var(--text-dark);
+}
+html.light .logo-title {
+  background: linear-gradient(
+    90deg,
+    #c47a12 0%,
+    #d27728 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* ==========================================================================
@@ -820,6 +877,85 @@ background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39
   margin-top: 0.25rem;
 }
 
+
+/* ==========================================================================
+   Hero Section — Light Mode Refinements
+   ========================================================================== */
+
+/* Floating Badges */
+html.light .floating-badge {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 25px rgba(43, 52, 57, 0.12);
+}
+
+html.light .badge-top {
+  border-color: rgba(194, 122, 18, 0.4);
+  color: #b87512;
+}
+
+html.light .badge-bottom {
+  border-color: rgba(210, 119, 40, 0.4);
+  color: #c16b22;
+}
+
+/* Hero Logo Card */
+html.light .hero-logo-card {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #f7e8d2 100%
+  );
+  border-color: rgba(210, 119, 40, 0.55);
+  box-shadow: 0 20px 45px rgba(210, 119, 40, 0.18);
+}
+
+html.light .circuit-overlay-svg {
+  opacity: 0.12;
+}
+
+/* Hero Text */
+html.light .hero-description {
+  color: #687078;
+}
+
+html.light .hero-card-subtitle {
+  color: #c16b22;
+}
+
+/* Secondary Button */
+html.light .hero-actions .btn-secondary {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #f7e8d2 100%
+  );
+  border-color: rgba(210, 119, 40, 0.45);
+  color: #2b3439;
+  box-shadow: 0 8px 18px rgba(43, 52, 57, 0.08);
+}
+
+html.light .hero-actions .btn-secondary:hover {
+  background: #fdf1de;
+  border-color: #d27728;
+  box-shadow: 0 12px 22px rgba(210, 119, 40, 0.15);
+}
+
+/* Statistics */
+html.light .stats-grid {
+  background-color: rgba(255, 255, 255, 0.75);
+  border-color: #e9dcc9;
+  box-shadow: 0 12px 30px rgba(43, 52, 57, 0.05);
+}
+
+html.light .stat-label {
+  color: #687078;
+}
+
+html.light .border-r {
+  border-color: rgba(43, 52, 57, 0.12);
+}
+
+
 /* ==========================================================================
    About Section
    ========================================================================== */
@@ -994,6 +1130,113 @@ background: radial-gradient(circle at center, var(--brand-cream) 0%, rgba(32, 39
 .feature-desc {
   font-size: 0.875rem;
   color: #9ca3af;
+}
+
+
+/* ==========================================================================
+   About Section — Light Mode Refinements
+   ========================================================================== */
+
+/* Section Background */
+html.light .about-section {
+  background-color: #f7e8d2;
+  border-top-color: #e9dcc9;
+  border-bottom-color: #e9dcc9;
+}
+
+/* Section Heading */
+html.light .about-section .section-subtitle {
+  color: #687078;
+}
+
+html.light .about-section .tag-gold {
+  color: #a96b08;
+  background-color: rgba(226, 164, 37, 0.12);
+  border-color: rgba(194, 122, 18, 0.35);
+}
+
+html.light .about-section .tag-orange {
+  color: #b75d19;
+  background-color: rgba(210, 119, 40, 0.1);
+  border-color: rgba(183, 93, 25, 0.3);
+}
+
+/* Philosophy Card */
+html.light .philosophy-card {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #fdf1de 100%
+  );
+  border-color: #e9c99f;
+  box-shadow: 0 18px 40px rgba(43, 52, 57, 0.08);
+}
+
+html.light .philosophy-title {
+  color: #2b3439;
+}
+
+html.light .philosophy-subtitle {
+  color: #a96b08;
+}
+
+html.light .philosophy-text {
+  color: #59636b;
+}
+
+/* Philosophy Icon */
+html.light .philosophy-icon {
+  background-color: #fdf1de;
+  color: #b87512;
+  border-color: #e9c99f;
+}
+
+/* Feature Items */
+html.light .feature-item {
+  background-color: #ffffff;
+  border-color: #e9dcc9;
+  box-shadow: 0 8px 20px rgba(43, 52, 57, 0.04);
+}
+
+html.light .feature-item:hover {
+  background-color: #fffdf9;
+  box-shadow: 0 12px 25px rgba(43, 52, 57, 0.08);
+}
+
+html.light .feature-title {
+  color: #2b3439;
+}
+
+html.light .feature-desc {
+  color: #687078;
+}
+
+/* Feature Icons */
+html.light .icon-gold {
+  background-color: #fdf1de;
+  color: #a96b08;
+}
+
+html.light .icon-orange {
+  background-color: #fbe9d9;
+  color: #b75d19;
+}
+
+/* Feature Borders */
+html.light .border-gold {
+  border-color: rgba(194, 122, 18, 0.2);
+}
+
+html.light .border-gold:hover {
+  border-color: #c48a24;
+}
+
+html.light .border-orange {
+  border-color: rgba(183, 93, 25, 0.2);
+}
+
+html.light .border-orange:hover {
+  border-color: #c16b22;
 }
 
 /* ==========================================================================
@@ -1243,6 +1486,129 @@ html[lang="ar"]:not(.dark) .card-title {
   margin-bottom: 0.5rem;
 }
 
+
+/* ==========================================================================
+   Drives & Content Section — Light Mode Refinements
+   ========================================================================== */
+
+/* Search & Filter Container */
+html.light .search-filter-box {
+  background-color: #ffffff;
+  border-color: #e9dcc9;
+  box-shadow: 0 12px 30px rgba(43, 52, 57, 0.05);
+}
+
+/* Search Input */
+html.light .search-input {
+  background-color: #fdf1de;
+  border-color: #e9dcc9;
+  color: #2b3439;
+}
+
+html.light .search-input::placeholder {
+  color: #899198;
+}
+
+html.light .search-input:focus {
+  border-color: #d27728;
+  box-shadow: 0 0 0 3px rgba(210, 119, 40, 0.1);
+}
+
+html.light .btn-clear-search {
+  color: #899198;
+}
+
+html.light .btn-clear-search:hover {
+  color: #d27728;
+}
+
+/* Filter Buttons */
+html.light .filter-btn {
+  background-color: #fdf1de;
+  color: #59636b;
+  border-color: #e9dcc9;
+}
+
+html.light .filter-btn:hover {
+  border-color: #d27728;
+  color: #b75d19;
+}
+
+html.light .filter-btn.active {
+  background: linear-gradient(90deg, #e2a425, #d27728);
+  color: #2b3439;
+}
+
+/* Result Count */
+html.light .result-count-label {
+  color: #b87512;
+}
+
+/* Content Cards */
+html.light .card-item {
+  background-color: #ffffff;
+  border-color: #e9dcc9;
+  box-shadow: 0 12px 28px rgba(43, 52, 57, 0.06);
+}
+
+html.light .card-item:hover {
+  border-color: rgba(210, 119, 40, 0.6);
+  box-shadow: 0 18px 32px rgba(43, 52, 57, 0.1);
+}
+
+html.light .card-category {
+  color: #899198;
+}
+
+html.light .card-desc {
+  color: #687078;
+}
+
+/* Card Tags */
+html.light .tag-badge {
+  background-color: #fdf1de;
+  color: #59636b;
+}
+
+/* Card Footer */
+html.light .card-footer {
+  border-top-color: #eee5d9;
+}
+
+/* Tree Button */
+html.light .btn-card-tree {
+  background-color: #fdf1de;
+  border-color: rgba(194, 122, 18, 0.3);
+  color: #a96b08;
+}
+
+html.light .btn-card-tree:hover {
+  background-color: #f7e8d2;
+  border-color: #d27728;
+}
+
+/* Bot Button */
+html.light .btn-card-bot {
+  background: linear-gradient(90deg, #e2a425, #d27728);
+  color: #2b3439;
+}
+
+/* Empty State */
+html.light .empty-state-box {
+  background-color: #ffffff;
+  border-color: #e9c99f;
+  color: #687078;
+}
+
+html.light .empty-state-title {
+  color: #2b3439;
+}
+
+html.light .empty-state-icon {
+  color: rgba(194, 122, 18, 0.6);
+}
+
+
 /* ==========================================================================
    Bot Request Banner
    ========================================================================== */
@@ -1290,6 +1656,55 @@ html[lang="ar"]:not(.dark) .card-title {
   max-width: 42rem;
   margin: 0 auto 2.5rem;
 }
+
+
+/* ==========================================================================
+   Bot Request Banner — Light Mode Refinements
+   ========================================================================== */
+
+/* Banner Background */
+html.light .bot-banner-section {
+  background: linear-gradient(
+    135deg,
+    #f7e8d2 0%,
+    #fbf7f0 50%,
+    #f7e8d2 100%
+  );
+  border-top-color: #e9dcc9;
+}
+
+/* Bot Icon */
+html.light .bot-banner-icon {
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #fdf1de
+  );
+  border-color: #d9a044;
+  color: #b87512;
+  box-shadow: 0 12px 25px rgba(210, 119, 40, 0.12);
+}
+
+/* Banner Title */
+html.light .banner-title {
+  color: #2b3439;
+}
+
+/* Banner Description */
+html.light .banner-desc {
+  color: #687078;
+}
+
+/* Banner Primary Button */
+html.light .bot-banner-section .btn-primary {
+  color: #2b3439;
+  box-shadow: 0 10px 22px rgba(210, 119, 40, 0.18);
+}
+
+html.light .bot-banner-section .btn-primary:hover {
+  box-shadow: 0 14px 28px rgba(210, 119, 40, 0.25);
+}
+
 
 /* ==========================================================================
    Modal
@@ -1388,6 +1803,64 @@ html[lang="ar"]:not(.dark) .card-title {
     flex-direction: row;
   }
 }
+
+
+/* ==========================================================================
+   Modal — Light Mode Refinements
+   ========================================================================== */
+
+/* Modal Backdrop */
+html.light .modal-backdrop {
+  background-color: rgba(43, 52, 57, 0.48);
+}
+
+/* Modal Container */
+html.light .modal-card {
+  background-color: #ffffff;
+  border-color: #e9c99f;
+  box-shadow: 0 25px 60px rgba(43, 52, 57, 0.18);
+}
+
+/* Modal Header */
+html.light .modal-header {
+  background-color: #f7e8d2;
+  border-bottom-color: #e9dcc9;
+}
+
+html.light .modal-header-title {
+  color: #2b3439;
+}
+
+/* Close Button */
+html.light .btn-close-modal {
+  background-color: #fdf1de;
+  color: #687078;
+}
+
+html.light .btn-close-modal:hover {
+  background-color: #f7e8d2;
+  color: #d27728;
+}
+
+/* Modal Body */
+html.light .modal-body {
+  background-color: #ffffff;
+}
+
+/* Tree Path Items */
+html.light .tree-line {
+  background-color: #fdf1de;
+  border-color: #e9dcc9;
+  color: #a96b08;
+}
+
+/* Modal Footer */
+html.light .modal-footer {
+  background-color: #f7e8d2;
+  border-top-color: #e9dcc9;
+  color: #687078;
+}
+
 
 /* ==========================================================================
    Footer
@@ -1507,3 +1980,59 @@ html[lang="ar"]:not(.dark) .card-title {
   gap: 0.25rem;
   color: #9ca3af;
 }
+
+
+/* ==========================================================================
+   Footer — Light Mode Refinements
+   ========================================================================== */
+
+html.light .footer {
+  background-color: #f7e8d2;
+  border-top-color: #e9dcc9;
+  color: #687078;
+}
+
+html.light .footer-brand-name,
+html.light .footer-heading {
+  color: #2b3439;
+}
+
+html.light .footer-desc {
+  color: #687078;
+}
+
+html.light .footer-list {
+  color: #59636b;
+}
+
+html.light .footer-list a:hover {
+  color: #d27728;
+}
+
+html.light .social-btn {
+  background-color: #ffffff;
+  border-color: #e9dcc9;
+  color: #59636b;
+}
+
+html.light .social-btn:hover {
+  background-color: #fdf1de;
+  border-color: #d27728;
+  color: #b75d19;
+}
+
+html.light .footer-bottom {
+  border-top-color: #e9dcc9;
+  color: #687078;
+}
+
+html.light .footer-credit {
+  color: #687078;
+}
+
+html.light .footer-h-icon {
+  background-color: #fdf1de;
+  border-color: #e9c99f;
+  color: #b87512;
+}
+
