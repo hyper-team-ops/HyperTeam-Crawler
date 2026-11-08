@@ -210,6 +210,25 @@ function resolveTelegramAction(row) {
 function makeTelegramUrl(row) {
   return resolveTelegramAction(row).url;
 }
+
+function getDetailsText(row) {
+  return getField(row, "Details", "لا توجد تفاصيل إضافية لهذا العنصر.");
+}
+
+function isProgrammingRow(row) {
+  const text =
+    `${getField(row, "File Name")} ${getField(row, "Category")} ${getField(row, "Path")} ${getSourceType(row)}`.toLowerCase();
+  return (
+    text.includes("programming") ||
+    text.includes("برمجة") ||
+    text.includes("code") ||
+    text.includes("c++") ||
+    text.includes("python") ||
+    text.includes("javascript") ||
+    text.includes("java") ||
+    text.includes("react")
+  );
+}
 function showOfficeOnlyModal(courseName) {
   const name = decodeURIComponent(courseName);
   const modal = document.getElementById("tree-modal");
@@ -242,6 +261,8 @@ function renderResults() {
       typeMatch = true;
     } else if (activeType === "OS") {
       typeMatch = isOSRow(row);
+    } else if (activeType === "Programming") {
+      typeMatch = isProgrammingRow(row);
     } else {
       typeMatch = row._sourceType === activeType;
     }
@@ -279,6 +300,7 @@ function renderResults() {
       const name = escapeHtml(getField(row, "File Name", "بدون اسم"));
       const size = escapeHtml(getField(row, "Size", "حجم غير محدد"));
       const path = escapeHtml(getField(row, "Path", "مسار غير محدد"));
+      const details = getDetailsText(row);
       const category = escapeHtml(getField(row, "Category", row._sourceType === "Course" ? "كورس" : "برنامج"));
       const telegramAction = resolveTelegramAction(row);
       const isCourse = row._sourceType === "Course";
@@ -324,15 +346,16 @@ function renderResults() {
                     </p>
 
                     <div class="card-tags">
-                        <span class="tag-badge">#${row._sourceType}</span>
+                        <span class="tag-badge">#${escapeHtml(row._sourceType)}</span>
                         ${isOSRow(row) ? '<span class="tag-badge">#OS</span>' : ""}
+                        ${isProgrammingRow(row) ? '<span class="tag-badge">#Programming</span>' : ""}
                     </div>
                 </div>
 
                 <div class="card-footer">
-                    <button type="button" data-path-row-index="${rowIndex}" class="btn-card-tree">
-                        <i class="fa-solid fa-sitemap"></i>
-                        <span>عرض المسار</span>
+                    <button type="button" data-details-row-index="${rowIndex}" class="btn-card-tree">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>التفاصيل</span>
                     </button>
                     ${actionButtons.join("")}
                 </div>
@@ -342,19 +365,18 @@ function renderResults() {
     .join("");
 }
 
-// MODAL PATH VIEW
-function openPathModal(row) {
+// DETAILS MODAL
+function openDetailsModal(row) {
   const name = getField(row, "File Name", "بدون اسم");
-  const path = getField(row, "Path", "مسار غير محدد");
+  const details = getDetailsText(row);
   const telegramAction = resolveTelegramAction(row);
 
-  document.getElementById("modal-title").innerText = name;
+  document.getElementById("modal-title").innerText = `تفاصيل: ${name}`;
   const treeContainer = document.getElementById("modal-tree-content");
 
   treeContainer.innerHTML = `
-        <div class="tree-line"><strong>الملف / المجلد:</strong> ${escapeHtml(name)}</div>
-        <div class="tree-line"><strong>المسار الفعلي على الهارد:</strong><br>${escapeHtml(path)}</div>
-    `;
+    <div class="tree-line" style="line-height: 1.6; white-space: pre-wrap;"><strong>التفاصيل:</strong><br>${escapeHtml(details)}</div>
+  `;
 
   const footer = document.querySelector(".modal-footer");
   if (footer) footer.style.display = "flex";
@@ -370,14 +392,17 @@ function openPathModal(row) {
 }
 
 contentGrid?.addEventListener("click", (event) => {
-  const pathButton = event.target.closest("[data-path-row-index]");
-  if (pathButton) {
-    const row = allData[Number(pathButton.dataset.pathRowIndex)];
-    if (row) openPathModal(row);
+  const target = event.target;
+  if (!target?.closest) return;
+
+  const detailsButton = target.closest("[data-details-row-index]");
+  if (detailsButton) {
+    const row = allData[Number(detailsButton.dataset.detailsRowIndex)];
+    if (row) openDetailsModal(row);
     return;
   }
 
-  const officeButton = event.target.closest("[data-office-row-index]");
+  const officeButton = target.closest("[data-office-row-index]");
   if (officeButton) {
     const row = allData[Number(officeButton.dataset.officeRowIndex)];
     if (row) showOfficeOnlyModal(encodeURIComponent(getField(row, "File Name", "بدون اسم")));

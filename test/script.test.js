@@ -53,7 +53,7 @@ function createRuntime(overrides = {}) {
     return ids.get(id);
   };
   const footer = createElement("modal-footer");
-  const tabs = ["All", "Software", "Course", "OS"].map((type) => {
+  const tabs = ["All", "Software", "Course", "OS", "Programming"].map((type) => {
     const tab = createElement();
     tab.dataset.type = type;
     return tab;
@@ -167,19 +167,66 @@ test("course actions distinguish YouTube from an original Telegram source", () =
   assert.doesNotMatch(html, /href="https:\/\/t\.me\/Hyper_Vault\/84\/133"/);
 });
 
-test("path modal resolves the same available link and label as the card", () => {
+test("details modal displays Details and resolves the same available link and label as the card", () => {
   const { runtime, getElement } = createRuntime();
   runtime.fixture = {
     "File Name": "Chrome",
     Path: "Software/Browsers/Chrome.zip",
+    " Details ": "متصفح سريع وآمن",
     "Telegram Status": "available",
     "Telegram Link": "https://t.me/HyperTeamITE_Bot?start=f_modalToken",
+    _sourceType: "Software",
   };
 
-  evaluate(runtime, "openPathModal(fixture)");
+  evaluate(runtime, "allData = [fixture]; renderResults(); openDetailsModal(fixture)");
+  assert.match(getElement("content-grid").innerHTML, /data-details-row-index="0"/);
+  assert.match(getElement("content-grid").innerHTML, /https:\/\/t\.me\/HyperTeamITE_Bot\?start=f_modalToken/);
+  assert.match(getElement("modal-tree-content").innerHTML, /متصفح سريع وآمن/);
+  assert.equal(getElement("modal-title").innerText, "تفاصيل: Chrome");
   assert.equal(getElement("modal-bot-btn").href, runtime.fixture["Telegram Link"]);
   assert.equal(getElement("modal-bot-btn")._label.textContent, "تحميل عبر تيليغرام");
   assert.doesNotMatch(getElement("modal-bot-btn").href, /[?&]text=/);
+});
+
+test("details modal event delegation uses the original row without inline onclick handlers", () => {
+  const { runtime, getElement } = createRuntime();
+  runtime.fixture = {
+    "File Name": "Delegated item",
+    Details: "Delegated details",
+    "Telegram Status": "unavailable",
+    _sourceType: "Software",
+  };
+  evaluate(runtime, "allData = [fixture]; renderResults()");
+
+  const button = createElement();
+  button.dataset.detailsRowIndex = "0";
+  getElement("content-grid")._listeners.click({ target: { closest: () => button } });
+
+  assert.match(getElement("modal-tree-content").innerHTML, /Delegated details/);
+  assert.equal(getElement("modal-bot-btn").href, "https://t.me/HyperTeamITE_Bot?start=request");
+  assert.doesNotMatch(getElement("content-grid").innerHTML, /onclick=/);
+});
+
+test("Programming filter and badge use normalized spreadsheet headers", () => {
+  const { runtime, getElement } = createRuntime();
+  runtime.programming = {
+    " File Name ": "Python Fundamentals",
+    " Category ": "Programming",
+    Path: "Courses/Python",
+    _sourceType: "Course",
+  };
+  runtime.other = {
+    "File Name": "Chrome",
+    Category: "Browser",
+    Path: "Software/Chrome",
+    _sourceType: "Software",
+  };
+
+  evaluate(runtime, 'allData = [programming, other]; activeType = "Programming"; renderResults()');
+  const html = getElement("content-grid").innerHTML;
+  assert.match(html, /Python Fundamentals/);
+  assert.match(html, /#Programming/);
+  assert.doesNotMatch(html, /Chrome/);
 });
 
 test("search, filtering, and a mocked catalog refresh remain functional", async () => {
