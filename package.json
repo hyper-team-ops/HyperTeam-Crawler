@@ -1,0 +1,7 @@
+{
+  "name": "hyperteam-crawler",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}
