@@ -5,6 +5,7 @@ const SOFTWARE_CSV_URL = `${BASE_URL}&gid=0`;
 const COURSES_CSV_URL = `${BASE_URL}&gid=291500461`;
 const SYNC_INTERVAL_MS = 300000;
 const TELEGRAM_BOT = "HyperTeamITE_Bot";
+const TELEGRAM_REQUEST_URL = `https://t.me/${TELEGRAM_BOT}?start=request`;
 
 let allData = [];
 let activeType = "All";
@@ -43,7 +44,7 @@ function fetchSheet(url, type) {
           }
           resolve(
             result.data
-              .filter((row) => row["File Name"] || row["Path"] || Object.values(row).some((v) => v))
+              .filter((row) => getField(row, "File Name") || getField(row, "Path") || Object.values(row).some((v) => v))
               .map((row) => ({ ...row, _sourceType: type })),
           );
         },
@@ -99,6 +100,20 @@ function safeText(value, fallback = "—") {
   return (value ?? "").toString().trim() || fallback;
 }
 
+function normalizeColumnName(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_-]+/g, "");
+}
+
+// Published Sheets headers occasionally contain leading/trailing whitespace.
+function getField(row, fieldName, fallback = "") {
+  const expectedName = normalizeColumnName(fieldName);
+  const matchingKey = Object.keys(row || {}).find((key) => normalizeColumnName(key) === expectedName);
+  return matchingKey ? safeText(row[matchingKey], fallback) : fallback;
+}
+
 function escapeHtml(value) {
   return String(value ?? "").replace(
     /[&<>"']/g,
@@ -114,17 +129,11 @@ function escapeHtml(value) {
 }
 
 function getSourceType(row) {
-  for (const key of Object.keys(row)) {
-    const cleanKey = key.trim().toLowerCase();
-    if (cleanKey === "source type" || cleanKey === "sourcetype" || cleanKey === "source_type") {
-      return safeText(row[key], "");
-    }
-  }
-  return safeText(row["Source Type"], "");
+  return getField(row, "Source Type");
 }
 
 function isOSRow(row) {
-  const text = `${row["File Name"] || ""} ${row["Category"] || ""} ${row["Path"] || ""}`.toLowerCase();
+  const text = `${getField(row, "File Name")} ${getField(row, "Category")} ${getField(row, "Path")}`.toLowerCase();
   return (
     text.includes("windows") ||
     text.includes("linux") ||
@@ -135,25 +144,80 @@ function isOSRow(row) {
   );
 }
 
-function makeTelegramUrl(row) {
-  const sourceType = getSourceType(row) || safeText(row["File Name"], "Unknown");
-  const kind = row._sourceType === "Course" ? "Course" : "Software";
-  const fileName = safeText(row["File Name"], "بدون اسم");
-  const message = `طلب ملف/كورس جديد:\nاسم الملف: ${fileName}\nالنوع: ${kind}\nالمصدر: ${sourceType}`;
-  return `https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`;
-}
-function getDetailsText(row) {
-  for (const key of Object.keys(row)) {
-    if (key.trim().toLowerCase() === "details") {
-      return safeText(row[key], "لا توجد تفاصيل إضافية لهذا العنصر.");
-    }
+function isValidTelegramFileUrl(value) {
+  const candidate = safeText(value, "");
+  if (!candidate) return false;
+
+  try {
+    const url = new URL(candidate);
+    const start = url.searchParams.get("start") || "";
+    return (
+      url.protocol === "https:" &&
+      url.hostname === "t.me" &&
+      url.port === "" &&
+      url.username === "" &&
+      url.password === "" &&
+      url.pathname === `/${TELEGRAM_BOT}` &&
+      url.hash === "" &&
+      [...url.searchParams.keys()].every((key) => key === "start") &&
+      url.searchParams.getAll("start").length === 1 &&
+      /^f_[A-Za-z0-9_-]{1,62}$/.test(start)
+    );
+  } catch {
+    return false;
   }
-  return safeText(row["Details"], "لا توجد تفاصيل إضافية لهذا العنصر.");
+}
+
+function isValidYouTubeUrl(value) {
+  const candidate = safeText(value, "");
+  if (!candidate) return false;
+
+  try {
+    const url = new URL(candidate);
+    const hostname = url.hostname.toLowerCase();
+    return (
+      url.protocol === "https:" &&
+      (hostname === "youtu.be" ||
+        hostname === "youtube.com" ||
+        hostname.endsWith(".youtube.com") ||
+        hostname === "youtube-nocookie.com" ||
+        hostname.endsWith(".youtube-nocookie.com"))
+    );
+  } catch {
+    return false;
+  }
+}
+
+function resolveTelegramAction(row) {
+  const status = getField(row, "Telegram Status").toLowerCase();
+  const telegramLink = getField(row, "Telegram Link");
+  const isAvailable = status === "available" && isValidTelegramFileUrl(telegramLink);
+
+  return isAvailable
+    ? {
+        url: telegramLink,
+        label: "تحميل عبر تيليغرام",
+        available: true,
+      }
+    : {
+        url: TELEGRAM_REQUEST_URL,
+        label: "طلب الملف عبر البوت",
+        available: false,
+      };
+}
+
+// Kept as the single compatibility entry point for every Telegram action.
+function makeTelegramUrl(row) {
+  return resolveTelegramAction(row).url;
+}
+
+function getDetailsText(row) {
+  return getField(row, "Details", "لا توجد تفاصيل إضافية لهذا العنصر.");
 }
 
 function isProgrammingRow(row) {
   const text =
-    `${row["File Name"] || ""} ${row["Category"] || ""} ${row["Path"] || ""} ${row["Source Type"] || ""}`.toLowerCase();
+    `${getField(row, "File Name")} ${getField(row, "Category")} ${getField(row, "Path")} ${getSourceType(row)}`.toLowerCase();
   return (
     text.includes("programming") ||
     text.includes("برمجة") ||
@@ -204,7 +268,7 @@ function renderResults() {
     }
 
     const searchable =
-      `${row["File Name"] || ""} ${row["Category"] || ""} ${row["Path"] || ""} ${getSourceType(row)}`.toLocaleLowerCase();
+      `${getField(row, "File Name")} ${getField(row, "Category")} ${getField(row, "Path")} ${getSourceType(row)}`.toLocaleLowerCase();
     return typeMatch && (!query || searchable.includes(query));
   });
 
@@ -232,41 +296,41 @@ function renderResults() {
   contentGrid.innerHTML = filtered
     .slice(0, 150)
     .map((row) => {
-      const name = escapeHtml(safeText(row["File Name"], "بدون اسم"));
-      const size = escapeHtml(safeText(row["Size"], "حجم غير محدد"));
-      const path = escapeHtml(safeText(row["Path"], "مسار غير محدد"));
-      const details = escapeHtml(getDetailsText(row));
-      const category = escapeHtml(safeText(row["Category"], row._sourceType === "Course" ? "كورس" : "برنامج"));
-      const telegramUrl = makeTelegramUrl(row);
+      const rowIndex = allData.indexOf(row);
+      const name = escapeHtml(getField(row, "File Name", "بدون اسم"));
+      const size = escapeHtml(getField(row, "Size", "حجم غير محدد"));
+      const path = escapeHtml(getField(row, "Path", "مسار غير محدد"));
+      const details = getDetailsText(row);
+      const category = escapeHtml(getField(row, "Category", row._sourceType === "Course" ? "كورس" : "برنامج"));
+      const telegramAction = resolveTelegramAction(row);
       const isCourse = row._sourceType === "Course";
       const sourceType = getSourceType(row);
-      const hasValidUrl = sourceType.startsWith("http://") || sourceType.startsWith("https://");
+      const hasYouTubeUrl = isCourse && isValidYouTubeUrl(sourceType);
 
-      let actionBtnHtml = "";
-      if (isCourse) {
-        if (hasValidUrl) {
-          actionBtnHtml = `
+      const actionButtons = [];
+      if (hasYouTubeUrl) {
+        actionButtons.push(`
             <a href="${escapeHtml(sourceType)}" target="_blank" rel="noopener noreferrer" class="btn-card-bot">
                 <i class="fa-brands fa-youtube"></i>
-                <span>مشاهدة عبر اليوتيوب</span>
+                <span>مشاهدة عبر يوتيوب</span>
             </a>
-          `;
-        } else {
-          actionBtnHtml = `
-            <button onclick="showOfficeOnlyModal('${encodeURIComponent(name)}')" class="btn-card-bot">
+          `);
+      } else if (isCourse && !telegramAction.available) {
+        actionButtons.push(`
+            <button type="button" data-office-row-index="${rowIndex}" class="btn-card-bot">
                 <i class="fa-solid fa-building-columns"></i>
                 <span>متوفر في المكتب فقط</span>
             </button>
-          `;
-        }
-      } else {
-        actionBtnHtml = `
-          <a href="${telegramUrl}" target="_blank" class="btn-card-bot">
-              <i class="fa-brands fa-telegram"></i>
-              <span>طلب عبر البوت</span>
-          </a>
-        `;
+          `);
       }
+
+      actionButtons.push(`
+          <a href="${escapeHtml(telegramAction.url)}" target="_blank" rel="noopener noreferrer" class="btn-card-bot">
+              <i class="fa-brands fa-telegram"></i>
+              <span>${telegramAction.label}</span>
+          </a>
+        `);
+
       return `
             <div class="card-item">
                 <div>
@@ -282,30 +346,30 @@ function renderResults() {
                     </p>
 
                     <div class="card-tags">
-                    <span class="tag-badge">#${row._sourceType}</span>
-                    ${isOSRow(row) ? '<span class="tag-badge">#OS</span>' : ""}
-                    ${isProgrammingRow(row) ? '<span class="tag-badge">#Programming</span>' : ""}
+                        <span class="tag-badge">#${escapeHtml(row._sourceType)}</span>
+                        ${isOSRow(row) ? '<span class="tag-badge">#OS</span>' : ""}
+                        ${isProgrammingRow(row) ? '<span class="tag-badge">#Programming</span>' : ""}
+                    </div>
                 </div>
+
+                <div class="card-footer">
+                    <button type="button" data-details-row-index="${rowIndex}" class="btn-card-tree">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>التفاصيل</span>
+                    </button>
+                    ${actionButtons.join("")}
                 </div>
-<div class="card-footer">
-                <button onclick="openDetailsModal('${encodeURIComponent(name)}', '${encodeURIComponent(details)}', '${encodeURIComponent(telegramUrl)}')" class="btn-card-tree">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span>التفاصيل</span>
-                </button>
-                ${actionBtnHtml}
-            </div>
             </div>
         `;
     })
     .join("");
 }
 
-// MODAL PATH VIEW
-// MODAL PATH VIEW
-function openDetailsModal(encodedName, encodedDetails, encodedTelegramUrl) {
-  const name = decodeURIComponent(encodedName);
-  const details = decodeURIComponent(encodedDetails);
-  const telegramUrl = encodedTelegramUrl ? decodeURIComponent(encodedTelegramUrl) : `https://t.me/${TELEGRAM_BOT}`;
+// DETAILS MODAL
+function openDetailsModal(row) {
+  const name = getField(row, "File Name", "بدون اسم");
+  const details = getDetailsText(row);
+  const telegramAction = resolveTelegramAction(row);
 
   document.getElementById("modal-title").innerText = `تفاصيل: ${name}`;
   const treeContainer = document.getElementById("modal-tree-content");
@@ -319,11 +383,31 @@ function openDetailsModal(encodedName, encodedDetails, encodedTelegramUrl) {
 
   const modalBotBtn = document.getElementById("modal-bot-btn");
   if (modalBotBtn) {
-    modalBotBtn.href = telegramUrl;
+    modalBotBtn.href = telegramAction.url;
+    const label = modalBotBtn.querySelector("span");
+    if (label) label.textContent = telegramAction.label;
   }
 
   document.getElementById("tree-modal").classList.remove("hidden");
 }
+
+contentGrid?.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!target?.closest) return;
+
+  const detailsButton = target.closest("[data-details-row-index]");
+  if (detailsButton) {
+    const row = allData[Number(detailsButton.dataset.detailsRowIndex)];
+    if (row) openDetailsModal(row);
+    return;
+  }
+
+  const officeButton = target.closest("[data-office-row-index]");
+  if (officeButton) {
+    const row = allData[Number(officeButton.dataset.officeRowIndex)];
+    if (row) showOfficeOnlyModal(encodeURIComponent(getField(row, "File Name", "بدون اسم")));
+  }
+});
 document.getElementById("close-modal")?.addEventListener("click", () => {
   document.getElementById("tree-modal").classList.add("hidden");
 });

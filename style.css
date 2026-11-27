@@ -1426,13 +1426,14 @@ html[lang="ar"]:not(.dark) .card-title {
 
 .card-footer {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   padding-top: 1rem;
   border-top: 1px solid #1f2937;
 }
 
 .btn-card-tree {
-  flex: 1;
+  flex: 1 1 130px;
   padding: 0.75rem;
   border-radius: 12px;
   background-color: var(--bg-dark);
@@ -1451,7 +1452,7 @@ html[lang="ar"]:not(.dark) .card-title {
 }
 
 .btn-card-bot {
-  flex: 1;
+  flex: 1 1 130px;
   padding: 0.75rem;
   border-radius: 12px;
   background: linear-gradient(90deg, var(--brand-gold), var(--brand-orange));
@@ -2035,4 +2036,3 @@ html.light .footer-h-icon {
   border-color: #e9c99f;
   color: #b87512;
 }
-

@@ -1,21 +1,53 @@
-# Hyper Team Library — preview
+# HyperTeam Crawler
 
-## Files
-- `index.html`: welcome page and library UI
-- `style.css`: responsive design using the Hyper Team palette
-- `script.js`: Google Sheets loading, filters, and Telegram links
-- `fonts/`: add the two font files here to use the local Montserrat font files
+واجهة عربية ثابتة لاستعراض فهرس برامج ودورات Hyper Team من Google Sheets، مع تسليم الملفات المسجّلة عبر HyperBot.
 
-## Test locally
-Open `index.html` in a browser. If the browser blocks CSV downloads from a `file://` URL, run a simple local static server (for example VS Code Live Server) or test on a GitHub Pages preview branch.
+## الملفات
 
-## Important Telegram behavior
-The links use Telegram's share URL with a prefilled message. Telegram may show a recipient chooser; select `@HyperTeamITE_Bot` and press Send. A website cannot send a message as the user without user interaction.
+- `index.html`: واجهة المكتبة والنوافذ التفاعلية.
+- `style.css`: التصميم المتجاوب وألوان Hyper Team.
+- `script.js`: تحميل Google Sheets والبحث والتصفية واختيار إجراءات Telegram وYouTube.
+- `test/script.test.js`: اختبارات تكامل الواجهة باستخدام بيانات فهرس وهمية.
 
-## Google Sheets
-The current published CSV URLs and GIDs are carried over from the existing site. The UI expects the existing headers `File Name`, `Size`, `Path`, and `Category`.
+## التشغيل والاختبار محلياً
 
-The provided workbook has `Source Type` in the `softwares` sheet but not in `courses`, and the values are currently blank. Until the team fills it, the request message falls back to the file name so the flow can still be tested. The bot should eventually use the agreed `Source Type` value as its lookup key.
+شغّل الموقع عبر خادم ملفات ثابت، مثل VS Code Live Server، لأن بعض المتصفحات تمنع جلب CSV عند فتح `index.html` مباشرة عبر `file://`.
 
-## GitHub Pages
-These files are static and can be published directly. No Node.js server or build step is required. To use the local font files, place `Montserrat-Regular.ttf` and `Montserrat-Bold.ttf` in `fonts/`.
+يتطلب تشغيل الاختبارات Node.js حديثاً فقط، ولا توجد حزم إنتاج أو عملية بناء:
+
+```sh
+npm test
+```
+
+## تكامل Google Sheets
+
+يستمر الموقع في استخدام رابط CSV المنشور نفسه، مع التبويبين التاليين:
+
+- `softwares` — GID `0`
+- `courses` — GID `291500461`
+
+إلى جانب الحقول الحالية، يدعم الموقع الحقول الآتية (مع تجاهل المسافات الزائدة في أسماء الأعمدة):
+
+- `File ID`: معرّف ثابت للعنصر في الفهرس.
+- `Telegram Link`: رابط التسليم العام الذي يولّده HyperBot، مثل `https://t.me/HyperTeamITE_Bot?start=f_<token>`.
+- `Telegram Status`: حالة التسجيل؛ القيمة `available` تسمح بالتنزيل إذا كان الرابط صالحاً.
+
+يبقى `Source Type` مرجعاً للمصدر الأصلي فقط. لا يستخدم الموقع رابط Hyper Vault الموجود فيه كرابط تنزيل. أما روابط YouTube الصحيحة في هذا الحقل فتظهر كإجراء مشاهدة مستقل للدورات.
+
+## سلوك HyperBot
+
+عندما تكون `Telegram Status` مساوية لـ `available` ويكون `Telegram Link` رابط HTTPS صالحاً للبوت ويحمل رمز ملف بالتنسيق المتوقع، يظهر زر **تحميل عبر تيليغرام** ويفتح القيمة نفسها الموجودة في الشيت. لا يحسب الموقع الرموز ولا يخزّن أسرار Telegram.
+
+إذا كانت الحالة `unavailable` أو `pending_review`، أو كانت الحالة/الرابط مفقودين أو غير صالحين، يظهر إجراء **طلب الملف عبر البوت** باستخدام:
+
+```text
+https://t.me/HyperTeamITE_Bot?start=request
+```
+
+يتحقق الموقع تلقائياً من CSV كل خمس دقائق. لذلك، بعد أن يسجّل HyperBot ملفاً ويحدّث أعمدة الشيت المنشورة، تتحول الواجهة إلى رابط التنزيل الجديد دون تعديل الكود أو إعادة النشر.
+
+HyperBot مسؤول عن تسجيل الملفات، إنشاء الرموز، ونسخ الملف من Hyper Vault إلى المستخدم بشكل خاص. HyperTeam Crawler مسؤول فقط عن عرض بيانات الفهرس واختيار رابط التسليم الآمن المنشور.
+
+## النشر
+
+المشروع ثابت بالكامل ويمكن نشره مباشرة على GitHub Pages. لا يحتاج إلى خادم Node.js أو بيانات اعتماد Google أو Telegram في الواجهة.
